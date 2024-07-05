@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/share_draw_nav"
+            android:icon="@drawable/ic_baseline_home_24"
+            android:title="Share app" />
+        <item
+            android:id="@+id/rate_draw_nav"
+            android:icon="@drawable/ic_baseline_home_24"
+            android:title="Rate us" />
+        <item
+            android:id="@+id/other_app"
+            android:icon="@drawable/ic_baseline_home_24"
+            android:title="Our apps" />
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/ic_baseline_home_24"
+            android:title="Logout" />
+    </group>
+
+</menu>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">வாங்க</string>
+    <string name="Onboarding">வாங்க</string>
+    <string name="Default_Currency">நாணயம்</string>
+    <string name="Language">மொழி</string>
+    <string name="Policy">கொள்கை</string>
+    <string name="Contact">எங்களை தொடர்பு கொள்ள</string>
+</resources>

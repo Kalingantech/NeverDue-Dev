@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RadioGroup
+        android:id="@+id/groupradio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- In RadioGroup create the 1 Radio Button-->
+        <!-- like this we will add some more Radio Button-->
+
+        <RadioButton
+            android:id="@+id/xml_sort_by_price"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/xml_sort_by_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textSize="20sp" />
+
+
+
+        <RadioButton
+            android:id="@+id/xml_sort_by_date"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:textSize="20sp" />
+
+    </RadioGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

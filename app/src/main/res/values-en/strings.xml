@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Never Due Dev</string>
+    <string name="Onboarding">Onboarding</string>
+    <string name="Default_Currency">Default Currency</string>
+    <string name="Language">Language</string>
+    <string name="Policy">Policy</string>
+    <string name="Contact">Contact</string>
+</resources>
