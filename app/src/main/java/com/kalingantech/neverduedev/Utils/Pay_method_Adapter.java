@@ -1,4 +1,4 @@
-package com.kalingantech.neverduedev.New_subscription;
+package com.kalingantech.neverduedev.Utils;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,24 +6,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.kalingantech.neverduedev.R;
 
-public class Icon_Adapter extends BaseAdapter {
+import java.util.ArrayList;
+
+public class Pay_method_Adapter extends BaseAdapter {
 
     Context context;
-    int logos[];
-    LayoutInflater inflter;
+    ArrayList<String> list;
 
-    public Icon_Adapter(Context context, int[] logos ) {
+
+    public Pay_method_Adapter(Context context, ArrayList<String> list ) {
         this.context = context;
-        this.logos = logos;
-        inflter = (LayoutInflater.from(context));
+        this.list = list;
     }
 
     @Override
     public int getCount() {
-        return logos.length;
+        return list.size();
     }
 
     @Override
@@ -38,9 +40,9 @@ public class Icon_Adapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(context).inflate(R.layout.icon_card_vw, null); // inflate the layout
-        ImageView icon = (ImageView) convertView.findViewById(R.id.xml_icon_image); // get the reference of ImageView
-        icon.setImageResource(logos[position]); // set logo images
+        convertView = LayoutInflater.from(context).inflate(R.layout.payment_single_row_data, null); // inflate the layout
+        TextView textView = convertView.findViewById(R.id.xml_single_row_data); // get the reference of ImageView
+        textView.setText(list.get(position));
         return convertView;
     }
 }

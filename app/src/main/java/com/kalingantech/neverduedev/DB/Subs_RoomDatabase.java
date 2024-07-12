@@ -9,9 +9,11 @@ import androidx.room.RoomDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Subs_list.class}, version = 1, exportSchema = false)
+@Database(entities = {Subs_list.class, Profile_list.class}, version = 1, exportSchema = false)
 public abstract class Subs_RoomDatabase extends RoomDatabase {
     public abstract Subs_DAO subs_DAO();
+
+    public abstract Profile_DAO profile_DAO();
 
     private static volatile Subs_RoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;

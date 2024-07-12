@@ -142,16 +142,16 @@
             android:background="@drawable/rounded_data_box"
             android:hint="Notes" />
 
-        <EditText
-            android:id="@+id/xml_edit_Paymentmethod"
+        <TextView
+            android:id="@+id/xml_Paymentmethod"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/rounded_data_box"
             android:hint="Payment method" />
 
-        <EditText
-            android:id="@+id/xml_edit_Category"
+        <TextView
+            android:id="@+id/xml_category_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

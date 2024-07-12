@@ -47,8 +47,8 @@ public class Splashscreen_Activity extends AppCompatActivity {
         String selected_language = sharedPreferences.getString("LANGUAGE", "en");
         load_language(selected_language);
 
-
-        checklogins(Login_times);
+        getSupportFragmentManager().beginTransaction().replace(R.id.xml_splash_screenlayout, new Onboarding_Fragment()).commit();
+        //checklogins(Login_times);
     }
 
     private void load_language(String lang) {

@@ -31,6 +31,9 @@ public interface Subs_DAO {
     @Query("SELECT * from subs_table ORDER By name Asc")
     LiveData<List<Subs_list>> getSubs_list_by_name();
 
+    @Query("SELECT * from subs_table ORDER By name Asc")
+    List<Subs_list> getSubs_get_list();
+
     @Query("SELECT * from subs_table ORDER By price Desc")
     LiveData<List<Subs_list>> getSubs_list_by_price();
 

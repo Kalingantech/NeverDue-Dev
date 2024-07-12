@@ -25,7 +25,6 @@ import com.kalingantech.neverduedev.DB.Subs_ViewModel;
 import com.kalingantech.neverduedev.DB.Subs_list;
 import com.kalingantech.neverduedev.New_subscription.Subs_template_Fragment;
 import com.kalingantech.neverduedev.R;
-import com.kalingantech.neverduedev.Setting_Fragment;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;

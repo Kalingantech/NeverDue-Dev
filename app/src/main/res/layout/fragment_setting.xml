@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Setting_Fragment">
+    tools:context=".Home.Setting_Fragment">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -110,6 +110,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="#EFEBE9"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/xml_language_lt"
                 android:layout_width="match_parent"
@@ -160,6 +161,76 @@
                     app:layout_constraintVertical_bias="0.466" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="#EFEBE9"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/xml_notification_lt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <ImageView
+                    android:id="@+id/xml_image_alarm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="15dp"
+                    android:src="@drawable/baseline_alarm_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.466" />
+
+                <TextView
+                    android:id="@+id/xml_notifiy_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="30dp"
+                    android:text="Notification Time"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/xml_image_alarm"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/xml_notification_time_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="4dp"
+                    android:text="18"
+                    app:layout_constraintStart_toStartOf="@+id/xml_notifiy_text"
+                    app:layout_constraintTop_toBottomOf="@+id/xml_notifiy_text" />
+
+                <TextView
+                    android:id="@+id/xml_notification_hr_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="5dp"
+                    android:text=": 00 hrs"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/xml_notification_time_tv" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/arrow_right_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.466" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

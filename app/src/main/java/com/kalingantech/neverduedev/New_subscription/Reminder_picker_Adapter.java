@@ -39,8 +39,8 @@ public class Reminder_picker_Adapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(context).inflate(R.layout.reminder_single, null); // inflate the layout
-        TextView textView = convertView.findViewById(R.id.xml_reminder_single_date); // get the reference of ImageView
+        convertView = LayoutInflater.from(context).inflate(R.layout.payment_single_row_data, null); // inflate the layout
+        TextView textView = convertView.findViewById(R.id.xml_single_row_data); // get the reference of ImageView
         textView.setText(reminderlist.get(position).string_days);
         return convertView;
     }

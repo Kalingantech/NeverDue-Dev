@@ -1,4 +1,4 @@
-package com.kalingantech.neverduedev;
+package com.kalingantech.neverduedev.Home;
 
 import android.app.Dialog;
 import android.app.NotificationChannel;
@@ -16,10 +16,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,19 +35,21 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.kalingantech.neverduedev.Home.Splashscreen_Activity;
-import com.kalingantech.neverduedev.New_subscription.Currency_logo_model;
-import com.kalingantech.neverduedev.New_subscription.Currency_picker_Adapter;
+import com.kalingantech.neverduedev.R;
+import com.kalingantech.neverduedev.Utils.Currency_logo_model;
+import com.kalingantech.neverduedev.Utils.Currency_picker_Adapter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class Setting_Fragment extends Fragment {
 
     String selected_curr_logo, selected_curr_code, selected_language, temp_lang_code;
 
-    TextView edit_currency, set_language_tv;
+    TextView edit_currency, set_language_tv,notification_time_tv;
 
+    int selected_alarm_hour;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor pref_editor;
     ArrayList<Currency_logo_model> currencyModels;
@@ -57,7 +62,7 @@ public class Setting_Fragment extends Fragment {
 
     Locale set_lang_locale;
 
-    ConstraintLayout currency_lt, language_lt, policy_lt, contact_lt,rating_lt;
+    ConstraintLayout currency_lt, language_lt,notification_lt, policy_lt, contact_lt,rating_lt;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,6 +77,9 @@ public class Setting_Fragment extends Fragment {
 
         language_lt = view.findViewById(R.id.xml_language_lt);
         set_language_tv = view.findViewById(R.id.xml_set_language_tv);
+
+        notification_lt = view.findViewById(R.id.xml_notification_lt);
+        notification_time_tv = view.findViewById(R.id.xml_notification_time_tv);
 
         policy_lt = view.findViewById(R.id.xml_policy_lt);
         contact_lt = view.findViewById(R.id.xml_contact_lt);
@@ -92,8 +100,13 @@ public class Setting_Fragment extends Fragment {
         selected_curr_logo = sharedPreferences.getString("CURRENCY_LOGO", "");
         selected_curr_code = sharedPreferences.getString("CURRENCY", "");
         selected_language = sharedPreferences.getString("LANGUAGE", "");
+        selected_alarm_hour = sharedPreferences.getInt("NOTIFICATION_HOUR", 18);
+
         String concat = selected_curr_logo + " " + selected_curr_code;
         edit_currency.setText(concat);
+        notification_time_tv.setText(String.valueOf(selected_alarm_hour));
+
+
 
         if (selected_language.equals("en")) {
             set_language_tv.setText("English");
@@ -114,6 +127,13 @@ public class Setting_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 language_picker();
+            }
+        });
+
+        notification_lt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notification_time_picker();
             }
         });
 
@@ -140,6 +160,72 @@ public class Setting_Fragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void notification_time_picker() {
+        final Dialog notify_dialog = new Dialog(getContext());
+        notify_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        notify_dialog.setContentView(R.layout.setting_notification_time_picker);
+        notify_dialog.show();
+        notify_dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        Spinner spinner = notify_dialog.findViewById(R.id.xml_default_time_spinner);
+        Button save_btn =notify_dialog.findViewById(R.id.xml_notify_time_save);
+
+
+
+
+
+        List<Integer> default_time_values = new ArrayList<Integer>();
+
+        for (int i = 1; i < 23; i++) {
+            default_time_values.add(i);
+        }
+
+        ArrayAdapter value_ad = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, default_time_values);
+        // set simple layout resource file for each item of spinner
+        value_ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(value_ad);
+
+
+        int temp_time_hrs = sharedPreferences.getInt("NOTIFICATION_HOUR", 18);
+
+
+        //setting the spinner value
+        for (int i = 0; i < default_time_values.size(); i++) {
+            if (spinner.getItemAtPosition(i).equals(temp_time_hrs)) {
+                spinner.setSelection(i);
+                break;
+            }else{
+                //DO_NOTHING
+            }
+        }
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Toast.makeText(getContext(), , Toast.LENGTH_LONG).show();
+
+                selected_alarm_hour = default_time_values.get(position);
+                notification_time_tv.setText(default_time_values.get(position).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                selected_alarm_hour = 18; //18 hours
+            }
+        });
+
+        save_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pref_editor.putInt("NOTIFICATION_HOUR", selected_alarm_hour);
+                pref_editor.commit();
+                notify_dialog.dismiss();
+            }
+        });
+
+
     }
 
     private void contact_us() {

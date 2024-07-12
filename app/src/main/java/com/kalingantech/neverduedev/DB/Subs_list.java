@@ -15,12 +15,12 @@ public class Subs_list {
     public String sub_image;
     double price,total_paid;
     Boolean reminder;
-    int billingcycle_no,reminder_no;
+    int billingcycle_no,reminder_no,notification_code;
     @TypeConverters(Converter.class)
     Date billing_next_date, billing_start_date;
     String name, notes,paymenttype, category, profile, billingcycle_step_type;
 
-    public Subs_list(int uid, String sub_image, double price,double total_paid,String name,  Date billing_start_date,Date billing_next_date,  int billingcycle_no,String billingcycle_step_type, Boolean reminder,int reminder_no,  String notes, String paymenttype, String category, String profile ) {
+    public Subs_list(int uid, String sub_image, double price,double total_paid,String name,  Date billing_start_date,Date billing_next_date,  int billingcycle_no,String billingcycle_step_type, Boolean reminder,int reminder_no,int notification_code,  String notes, String paymenttype, String category, String profile ) {
         this.uid = uid;
         this.sub_image = sub_image;
         this.price = price;
@@ -32,6 +32,7 @@ public class Subs_list {
         this.billingcycle_step_type = billingcycle_step_type;
         this.reminder = reminder;
         this.reminder_no = reminder_no;
+        this.notification_code = notification_code;
         this.notes = notes;
 
         this.paymenttype = paymenttype;
@@ -41,7 +42,7 @@ public class Subs_list {
     }
 
     @Ignore
-    public Subs_list(String sub_image, double price,double total_paid,String name,  Date billing_start_date,Date billing_next_date,  int billingcycle_no,String billingcycle_step_type, Boolean reminder,int reminder_no,  String notes, String paymenttype, String category, String profile ) {
+    public Subs_list(String sub_image, double price,double total_paid,String name,  Date billing_start_date,Date billing_next_date,  int billingcycle_no,String billingcycle_step_type, Boolean reminder,int reminder_no, int notification_code, String notes, String paymenttype, String category, String profile ) {
         this.sub_image = sub_image;
         this.price = price;
         this.total_paid = total_paid;
@@ -52,7 +53,7 @@ public class Subs_list {
         this.billingcycle_step_type = billingcycle_step_type;
         this.reminder = reminder;
         this.reminder_no = reminder_no;
-
+        this.notification_code = notification_code;
         this.notes = notes;
 
         this.paymenttype = paymenttype;
@@ -111,6 +112,14 @@ public class Subs_list {
 
     public int getReminder_no() {
         return reminder_no;
+    }
+
+    public int getNotification_code() {
+        return notification_code;
+    }
+
+    public void setNotification_code(int notification_code) {
+        this.notification_code = notification_code;
     }
 
     public void setReminder_no(int reminder_no) {

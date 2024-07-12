@@ -1,4 +1,4 @@
-package com.kalingantech.neverduedev.New_subscription;
+package com.kalingantech.neverduedev.Utils;
 
 import android.content.Context;
 import android.view.LayoutInflater;

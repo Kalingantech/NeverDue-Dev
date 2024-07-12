@@ -27,6 +27,10 @@ import com.kalingantech.neverduedev.DB.Subs_ViewModel;
 import com.kalingantech.neverduedev.DB.Subs_list;
 import com.kalingantech.neverduedev.Home.Home_Fragment;
 import com.kalingantech.neverduedev.R;
+import com.kalingantech.neverduedev.Utils.Category_logo_model;
+import com.kalingantech.neverduedev.Utils.Category_picker_Adapter;
+import com.kalingantech.neverduedev.Utils.Icon_Adapter;
+import com.kalingantech.neverduedev.Utils.Pay_method_Adapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,18 +42,18 @@ import java.util.Locale;
 
 public class Edit_sub_Fragment extends Fragment {
 
-    EditText price_edit, name_edit, notes_edit, link_edit, paymenttracking_edit, paymenttype_edit;
-    EditText category_edit, profile_edit, reminder_edit, remindertype_edit;
-    TextView biling_next_date_tv, bilingcycle_startdate_tv;
+    EditText price_edit, name_edit, notes_edit, link_edit, paymenttracking_edit;
+    EditText  profile_edit, reminder_edit, remindertype_edit;
+    TextView biling_next_date_tv, bilingcycle_startdate_tv,category_tv,paymenttype_tv;
     Button colour_btn, update_btn;
     Uri selected_image_uri;
-    String selected_curr_logo, selected_curr, selected_bilingcycle_type;
+    String selected_curr_logo, selected_curr, selected_bilingcycle_type,selected_category,selected_pay_method;
     int Selected_bilingcycle_no_edit;
     ImageView sub_image;
 
     Switch reminder_switch;
     Boolean selected_reminder_true_false;
-    TextView edit_Reminder_edit_tv;
+    TextView edit_Reminder_edit_tv,paymentmethod_tv;
     int selected_reminder_day_count;
     String Reminder_return_value;
     private Subs_ViewModel subs_viewModel;
@@ -82,9 +86,9 @@ public class Edit_sub_Fragment extends Fragment {
         Billing_cycle_spinner = view.findViewById(R.id.xml_edit_Billing_cycle_no);
         bilingcycle_startdate_tv = view.findViewById(R.id.xml_edit_Billing_startdate);
 
-        paymenttype_edit = view.findViewById(R.id.xml_edit_Paymentmethod);
+        paymentmethod_tv = view.findViewById(R.id.xml_Paymentmethod);
 
-        category_edit = view.findViewById(R.id.xml_edit_Category);
+        category_tv = view.findViewById(R.id.xml_category_tv);
         profile_edit = view.findViewById(R.id.xml_edit_Profilename);
         reminder_switch = view.findViewById(R.id.xml_reminder_switch);
         edit_Reminder_edit_tv = view.findViewById(R.id.xml_edit_Reminder_data);
@@ -141,8 +145,12 @@ public class Edit_sub_Fragment extends Fragment {
             notes_edit.setText(subs_list.getNotes());
             //reminder_edit.setText(subs_list.getReminder());
             //remindertype_edit.setText(subs_list.getRemindertype());
-            paymenttype_edit.setText(subs_list.getPaymenttype());
-            category_edit.setText(subs_list.getCategory());
+            paymentmethod_tv.setText(subs_list.getPaymenttype());
+            selected_pay_method = subs_list.getPaymenttype();
+
+            category_tv.setText(subs_list.getCategory());
+            selected_category = subs_list.getCategory();
+
             profile_edit.setText(subs_list.getProfile());
 
 
@@ -227,7 +235,20 @@ public class Edit_sub_Fragment extends Fragment {
             }
         });
 
+        category_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                categorydata();
+            }
+        });
+
+        paymentmethod_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              pay_methoddata();
+            }
+        });
 
 
 
@@ -301,8 +322,8 @@ public class Edit_sub_Fragment extends Fragment {
                 //edit_subs_list.setReminder(reminder_edit.getText().toString());
                 //edit_subs_list.setRemindertype(remindertype_edit.getText().toString());
                 //---------------------------
-                edit_subs_list.setPaymenttype(paymenttype_edit.getText().toString());
-                edit_subs_list.setCategory(category_edit.getText().toString());
+                edit_subs_list.setPaymenttype(selected_pay_method);
+                edit_subs_list.setCategory(selected_category);
                 edit_subs_list.setProfile(profile_edit.getText().toString());
 
                 //total amount we are not updating it here.
@@ -321,8 +342,6 @@ public class Edit_sub_Fragment extends Fragment {
         return view;
 
     }
-
-
     private void select_image() {
 
         final Dialog img_dialog = new Dialog(getContext());
@@ -356,20 +375,90 @@ public class Edit_sub_Fragment extends Fragment {
 
     }
 
-
     public static Uri getUri(int res) {
         return Uri.parse("android.resource://com.kalingantech.neverduedev/" + res);
     }
 
+    private void pay_methoddata() {
+
+        final Dialog pay_dialog = new Dialog(getContext());
+        pay_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        pay_dialog.setContentView(R.layout.payment_list_data_picker);
+        pay_dialog.show();
+        pay_dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        ListView listView = pay_dialog.findViewById(R.id.xml_simple_data_listvw);
+
+        ArrayList<String> pay_method_list = new ArrayList<>();
+
+
+        pay_method_list.add("Debit card");
+        pay_method_list.add("Credit card");
+        pay_method_list.add("Cash");
+        pay_method_list.add("Google Pay");
+        pay_method_list.add("Amazon Pay");
+        pay_method_list.add("Other");
+
+
+        Pay_method_Adapter simple_Adapter = new Pay_method_Adapter(pay_dialog.getContext(), pay_method_list);
+        listView.setAdapter(simple_Adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selected_pay_method = pay_method_list.get(position).toString();
+                paymentmethod_tv.setText(pay_method_list.get(position).toString());
+                pay_dialog.dismiss();
+            }
+        });
+    }
+
+    private void categorydata() {
+
+        final Dialog cat_dialog = new Dialog(getContext());
+        cat_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        cat_dialog.setContentView(R.layout.category_picker);
+        cat_dialog.show();
+        cat_dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        ListView listView = cat_dialog.findViewById(R.id.xml_cat_data_listvw);
+
+        ArrayList<Category_logo_model> catergory_list = new ArrayList<>();
+
+        catergory_list.add(new Category_logo_model(R.drawable.baseline_adb_24,"Education"));
+        catergory_list.add(new Category_logo_model(R.drawable.baseline_adb_24,"Food"));
+        catergory_list.add(new Category_logo_model(R.drawable.baseline_adb_24,"Gaming"));
+        catergory_list.add(new Category_logo_model(R.drawable.baseline_adb_24,"Grocery"));
+        catergory_list.add(new Category_logo_model(R.drawable.baseline_adb_24,"Health"));
+        catergory_list.add(new Category_logo_model(R.drawable.baseline_adb_24,"Insurace"));
+        catergory_list.add(new Category_logo_model(R.drawable.baseline_adb_24,"Internet"));
+        catergory_list.add(new Category_logo_model(R.drawable.baseline_adb_24,"Entertainment"));
+        catergory_list.add(new Category_logo_model(R.drawable.baseline_adb_24,"Sports"));
+        catergory_list.add(new Category_logo_model(R.drawable.baseline_adb_24,"Transportation"));
+        catergory_list.add(new Category_logo_model(R.drawable.baseline_adb_24,"Other"));
+
+        Category_picker_Adapter simple_Adapter = new Category_picker_Adapter(cat_dialog.getContext(), catergory_list);
+        listView.setAdapter(simple_Adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selected_category = catergory_list.get(position).getCat_name();
+                category_tv.setText(catergory_list.get(position).getCat_name());
+                cat_dialog.dismiss();
+            }
+        });
+
+    }
     private void getreminderdata() {
 
         final Dialog curr_dialog = new Dialog(getContext());
         curr_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        curr_dialog.setContentView(R.layout.reminder_data_picker);
+        curr_dialog.setContentView(R.layout.payment_list_data_picker);
         curr_dialog.show();
         curr_dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        ListView listView = curr_dialog.findViewById(R.id.xml_reminder_data_list);
+        ListView listView = curr_dialog.findViewById(R.id.xml_simple_data_listvw);
         ArrayList<Reminder_model> reminderModels = new ArrayList<>();
         reminderModels.add(new Reminder_model(0, "Same day"));
         reminderModels.add(new Reminder_model(1, "One day"));

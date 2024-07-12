@@ -20,11 +20,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -34,16 +38,19 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.kalingantech.neverduedev.New_subscription.Currency_logo_model;
-import com.kalingantech.neverduedev.New_subscription.Currency_picker_Adapter;
+import com.kalingantech.neverduedev.DB.Profile_list;
+import com.kalingantech.neverduedev.DB.Subs_ViewModel;
+import com.kalingantech.neverduedev.Utils.Currency_logo_model;
+import com.kalingantech.neverduedev.Utils.Currency_picker_Adapter;
 import com.kalingantech.neverduedev.R;
-import com.kalingantech.neverduedev.Utils.NotificationReceiver;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class Onboarding_Fragment extends Fragment {
@@ -51,6 +58,8 @@ public class Onboarding_Fragment extends Fragment {
     String selected_curr_logo, selected_curr_code, selected_language, temp_lang_code;
 
     TextView edit_currency, set_language_tv;
+
+    EditText profile_name_edit;
     Button save_btn;
 
     SharedPreferences sharedPreferences;
@@ -65,11 +74,15 @@ public class Onboarding_Fragment extends Fragment {
 
     Currency_picker_Adapter curr_Adapter;
 
-    int selected_hour,selected_minute;
+    int selected_alarm_hour;
 
     Locale set_lang_locale;
 
     final Calendar alarm_calendar = Calendar.getInstance();
+
+
+    Spinner default_time_spinner;
+   private Subs_ViewModel subs_viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,20 +90,28 @@ public class Onboarding_Fragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_onboarding, container, false);
 
+
+        subs_viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().getApplication()).create(Subs_ViewModel.class);
+
+        profile_name_edit =view.findViewById(R.id.xml_profile_name);
         edit_currency = view.findViewById(R.id.xml_edit_currency);
         set_language_tv = view.findViewById(R.id.xml_set_language_tv);
         send_notiy_switch = view.findViewById(R.id.xml_send_notiy_btn);
+
         default_time_layout = view.findViewById(R.id.xml_default_time_layout);
-        default_time = view.findViewById(R.id.xml_default_time);
+        default_time_spinner = view.findViewById(R.id.xml_default_time_spinner);
+
+
         save_btn = view.findViewById(R.id.xml_save_setting);
 
         sharedPreferences = getActivity().getSharedPreferences("PREF", 0);
         pref_editor = sharedPreferences.edit();
 
-        default_time.setEnabled(false);
+        default_time_layout.setVisibility(View.GONE);
 
         //------------------------------------------
         create_curr_array();
+
         //------------------------------------------
 
 
@@ -100,6 +121,10 @@ public class Onboarding_Fragment extends Fragment {
         selected_curr_logo = sharedPreferences.getString("CURRENCY_LOGO", "$");
         selected_curr_code = sharedPreferences.getString("CURRENCY", "USD");
         selected_language = sharedPreferences.getString("LANGUAGE", "en");
+        selected_alarm_hour = 18;
+
+
+
 
         String concat = selected_curr_logo + " " + selected_curr_code;
         edit_currency.setText(concat);
@@ -132,53 +157,44 @@ public class Onboarding_Fragment extends Fragment {
 
                     //-----------------------------
                     check_permission();
-                    enable_notifcation();
+                    //enable_notifcation();
                     //-----------------------------
-                    default_time.setEnabled(true);
+                    default_time_layout.setVisibility(View.VISIBLE);
                 } else {
                     // on below line we are setting text if switch is NOT checked.
                 }
             }
         });
 
-        default_time.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                List<Integer> default_time_values = new ArrayList<Integer>();
 
+                for (int i = 1; i < 23; i++) {
+                    default_time_values.add(i);
+                }
 
-                alarm_calendar.set(Calendar.YEAR, 2024);
-                alarm_calendar.set(Calendar.MONTH, 7);
-                alarm_calendar.set(Calendar.DAY_OF_MONTH, 29);
-                alarm_calendar.set(Calendar.HOUR_OF_DAY,23);
-                alarm_calendar.set(Calendar.MINUTE,4);
-                alarm_calendar.set(Calendar.SECOND,5);
+                ArrayAdapter value_ad = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, default_time_values);
+                // set simple layout resource file for each item of spinner
+                value_ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                default_time_spinner.setAdapter(value_ad);
 
-                // on below line we are getting our hour, minute.
-                selected_hour = alarm_calendar.get(Calendar.HOUR_OF_DAY);
-                selected_minute = alarm_calendar.get(Calendar.MINUTE);
-                // on below line we are initializing our Time Picker Dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay,
-                                                  int minute) {
-                                // on below line we are setting selected time
-                                // in our text view.
-                                default_time.setText(hourOfDay + ":" + minute);
-                                pref_editor.putInt("NOTIFICATION_HOUR", hourOfDay);
-                                pref_editor.putInt("NOTIFICATION_MIN", minute);
-                                pref_editor.commit();
+                default_time_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        //Toast.makeText(getContext(), , Toast.LENGTH_LONG).show();
 
-                            }
-                        }, selected_hour, selected_minute, false);
-                // at last we are calling show to
-                // display our time picker dialog.
-                timePickerDialog.show();
+                        selected_alarm_hour = default_time_values.get(position);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        selected_alarm_hour = 18; //18 hours
+                    }
+                });
 
 
 
-            }
-        });
+
+
 
 
 
@@ -186,19 +202,33 @@ public class Onboarding_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                pref_editor.putString("CURRENCY_LOGO", selected_curr_logo);
-                pref_editor.putString("CURRENCY", selected_curr_code);
-                pref_editor.putString("LANGUAGE", selected_language);
-                pref_editor.commit();
+                String temp_name = profile_name_edit.getText().toString().trim();
 
-                Intent loginintent = new Intent(getContext(), MainActivity.class);
-                startActivity(loginintent);
+                if(temp_name.isEmpty()){
+                    Toast.makeText(getContext(),"Enter a validate name",Toast.LENGTH_SHORT).show();
+
+                }else{
+                    Profile_list name = new Profile_list(temp_name);
+                    subs_viewModel.insert_profile(name);
+
+                    pref_editor.putString("CURRENCY_LOGO", selected_curr_logo);
+                    pref_editor.putString("CURRENCY", selected_curr_code);
+                    pref_editor.putString("LANGUAGE", selected_language);
+                    pref_editor.putInt("NOTIFICATION_HOUR", selected_alarm_hour);
+                    pref_editor.commit();
+
+                    Intent loginintent = new Intent(getContext(), MainActivity.class);
+                    startActivity(loginintent);
+                }
+
             }
         });
 
 
         return view;
     }
+
+
 
     private void currency_picker() {
 
@@ -332,6 +362,7 @@ public class Onboarding_Fragment extends Fragment {
         }
     }
 
+/*
     @SuppressLint("ScheduleExactAlarm")
     private void enable_notifcation() {
 
@@ -371,6 +402,7 @@ public class Onboarding_Fragment extends Fragment {
 
     }
 
+*/
 
 
     private void create_curr_array() {

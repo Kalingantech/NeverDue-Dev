@@ -1,4 +1,4 @@
-package com.kalingantech.neverduedev.New_subscription;
+package com.kalingantech.neverduedev.Utils;
 
 public class Currency_logo_model {
     String curr_logo;
